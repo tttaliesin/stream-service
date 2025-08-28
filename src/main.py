@@ -1,17 +1,24 @@
-import socketio
+
+import logging
+import asyncio
 from fastapi import FastAPI
 
-from stream_service.infrastructure.adapters.input.capture_router import router as capture_router
-from stream_service.infrastructure.adapters.input.socketio_handlers import setup_socketio_handlers
-from stream_service.infrastructure.config.container import Container
 
+from config.settings import settings
+from config.container import Container
 
-def create_app() -> FastAPI:
+from adapters.inbound.http.static_router import router as static_router
+
+logging.basicConfig(
+    level=logging.DEBUG if settings.debug else logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
+logger = logging.getLogger(__name__)
+
+async def create_app() -> FastAPI:
     # DI Container 초기화
     container = Container()
-    container.wire(modules=[
-        "stream_service.infrastructure.adapters.input.capture_router",
-    ])
     
     # FastAPI 앱 생성
     app = FastAPI(
@@ -19,28 +26,42 @@ def create_app() -> FastAPI:
         version="0.1.0",
         description="Real-time RTSP stream capture and broadcast service"
     )
-    app.container = container
+    # app.container = container
     
-    # REST API 라우터 추가
-    app.include_router(capture_router)
+    app.include_router(static_router)
     
-    # Socket.IO 서버 설정
-    sio = container.socketio_server()
-    socketio_broadcaster = container.socketio_broadcaster()
-    capture_use_cases = container.capture_use_cases()
+    stream_messaging = container.stream_messaging()
     
-    # Socket.IO 이벤트 핸들러 설정
-    setup_socketio_handlers(sio, capture_use_cases, socketio_broadcaster)
+    try:
+        await stream_messaging.connect()
+        logger.info("Socket.io adapter connected successfully")
+    except Exception as e:
+        logger.error(f"Failed to connect Socket.io adapter: {e}")
+        raise
     
-    # Socket.IO ASGI 앱 생성
-    socketio_asgi_app = socketio.ASGIApp(sio, app)
     
-    return socketio_asgi_app
+    container.socketio_command_adapter()
+    logger.info("Socket.io command adapter initialized")
+    
+    return app
 
+async def main():
+    return await create_app()
 
-app = create_app()
-
+app = asyncio.run(main())
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    import signal
+    
+    def signal_handler(signum, frame):
+        print("Shutting down gracefully...")
+        
+        
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+    
+    try:
+        uvicorn.run(app, host=settings.host, port=settings.port)
+    except KeyboardInterrupt:
+        print("Server stopped.")    

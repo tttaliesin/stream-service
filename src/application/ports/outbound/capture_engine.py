@@ -15,7 +15,7 @@ class CaptureEngine(ABC):
     
     @abstractmethod
     async def get_current_frame(self) -> Optional[bytes]:
-        """현재 프레임을 이미지 바이너리로 반환"""
+        """현재 프레임을 바이너리로 반환"""
         pass
     
     @abstractmethod
