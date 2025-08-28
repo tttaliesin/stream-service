@@ -1,0 +1,103 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+.container {
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.controls {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+button {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    margin: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:disabled {
+    background: #adb5bd;
+    cursor: not-allowed;
+}
+
+.video-container {
+    text-align: center;
+    margin-top: 20px;
+    width: 800px;
+    height: 600px;
+    margin: 20px auto;
+    border: 2px solid #dee2e6;
+    border-radius: 5px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#videoFrame, #videoCanvas {
+    /* max-width: 100%;
+    max-height: 100%; */
+    /* width: auto;
+    height: auto; */
+    width: 800px;
+    height: 600px;
+    border-radius: 5px;
+    object-fit: contain;
+}
+
+.rtsp-info {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.connection-status, .capture-status {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+    margin-left: 15px;
+}
+
+.connected {
+    background: #28a745;
+}
+
+.disconnected {
+    background: #dc3545;
+}
+
+#noVideo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #6c757d;
+    font-size: 18px;
+    text-align: center;
+}

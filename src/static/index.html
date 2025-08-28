@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTSP Stream Service</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>RTSP Stream Service</h1>
+        
+        <div class="rtsp-info">
+            <strong>RTSP URL:</strong> <span id="rtspUrl">연결 중...</span>
+            <br><small>* 서버에서 설정된 RTSP 스트림 주소</small>
+        </div>
+        
+        <div class="controls">
+            <span class="connection-status disconnected" id="connectionStatus"></span>
+            <span>Web Socket: </span>
+            <span id="connectionText">연결 중...</span>
+            <span class="capture-status disconnected" id="captureStatus"></span>
+            <span>캡처 상태: </span>
+            <span id="captureText">중지됨</span>
+            
+            <button id="startCaptureBtn" onclick="startCapture()">캡처 시작</button>
+            <button id="stopCaptureBtn" onclick="stopCapture()" disabled>캡처 중지</button>
+            <button id="startStreamingBtn" onclick="startStreaming()" disabled>스트리밍 시작</button>
+            <button id="stopStreamingBtn" onclick="stopStreaming()" disabled>스트리밍 중지</button>
+        </div>
+        
+        
+        <div class="video-container">
+            <canvas id="videoCanvas" style="display: none;"/>
+            <img id="videoFrame" src="" alt="비디오 프레임이 여기에 표시됩니다" style="display: none;">
+            <div id="noVideo">
+                비디오 스트림을 시작하려면 '캡처 시작' 버튼을 클릭하세요
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
