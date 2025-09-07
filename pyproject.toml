@@ -28,11 +28,19 @@ dev = [
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-package-dir = {"" = "src"}
-
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = "-v --tb=short"
+testpaths = ["test"]
+pythonpath = ["src"]
+addopts = [
+    "--import-mode=importlib",
+    "--verbose",
+    "--tb=short",
+    "--strict-markers",
+    "--strict-config",
+    "--disable-warnings",
+    "-ra"
+]
 asyncio_mode = "auto"
