@@ -145,11 +145,11 @@ class CaptureSession:
 - 캡처 세션 상태 추적
 - 프레임 콜백 처리
 
-### 2. SocketIOCommandAdapter (인바운드 어댑터)
+### 2. SocketIOClient (인바운드 어댑터)
 - Event Management Service로부터 명령 수신
 - 이벤트를 도메인 로직으로 전달
 
-### 3. SocketIOStreamingAdapter (아웃바운드 어댑터)
+### 3. SocketIOPublisher (아웃바운드 어댑터)
 - Event Management Service로 비디오 프레임 전송
 - 연결 관리 및 에러 처리
 
@@ -161,10 +161,10 @@ class CaptureSession:
 
 ### 캡처 시작 플로우
 1. Event Management Service에서 `capture_start_request` 수신
-2. `CaptureStreamHandler`가 요청 처리
+2. `CaptureEventSubscriber`가 요청 처리
 3. `CaptureService`가 RTSP 캡처 시작
 4. `OpenCVCaptureEngine`이 실제 스트림 캡처
-5. 캡처된 프레임을 콜백으로 `SocketIOStreamingAdapter`에 전달
+5. 캡처된 프레임을 콜백으로 `SocketIOPublisher`에 전달
 6. 비디오 프레임을 Event Management Service로 전송
 
 ### 캡처 중지 플로우
